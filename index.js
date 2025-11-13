@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const { MongoClient, ServerApiVersion } = require('mongodb');
 
 const app=express()
 const port=process.env.PORT || 3000
@@ -8,13 +9,38 @@ const port=process.env.PORT || 3000
 app.use(cors())
 app.use(express.json())
 
-app.get('/', (req,res)=>{
-    res.send("Impactify Server Is Running")
-})
+const uri = "mongodb+srv://SocialeventDB:SstreCNaivys9LuO@myfirst-cluster.32i1hy9.mongodb.net/?appName=myfirst-cluster";
 
+         app.get('/', (req,res)=>{
+             res.send("Impactify Server Is Running")
+         })
+
+                const client = new MongoClient(uri, {
+                 serverApi: {
+                 version: ServerApiVersion.v1,
+                 strict: true,
+                 deprecationErrors: true,
+           }
+         });
 async function run() {
     try{
-          
+          await client.connect();
+
+          const db=client.db('eventDb')
+          const eventCollaction=db.collection('event')
+
+
+
+
+          app.post('/event', async(req,res)=>{
+               const data = req.body
+               const result = await eventCollaction.insertOne(data)
+               res.send(result)
+          })
+
+     
+           await client.db("admin").command({ ping: 1 });
+            console.log("Pinged your deployment. You successfully connected to MongoDB!");
     }
     finally{
 
