@@ -44,6 +44,12 @@ async function run() {
             res.send(result)
           })
 
+          app.get('/manage-events', async(req,res)=>{
+              const email=req.query.email
+              const result= await eventCollaction.find({created_by: email}).toArray()
+              res.send(result)
+          })
+
 
           app.post('/event', async(req,res)=>{
                const data = req.body
