@@ -29,7 +29,11 @@ async function run() {
           const db=client.db('eventDb')
           const eventCollaction=db.collection('event')
 
-
+          app.get('/event', async(req,res)=>{
+             const cursor= eventCollaction.find()
+             const result= await cursor.toArray()
+             res.send(result)
+          })
 
 
           app.post('/event', async(req,res)=>{
