@@ -81,6 +81,25 @@ async function run() {
               res.send(result)
           })
 
+        //   Search and Filtering Api 
+        app.get('/search-events', async(req,res)=>{
+           const {search="", type="All"}= req.query
+           const today = new Date();
+
+           const query ={event_date: {$gte: today}}
+
+           if(search){
+            query.title={ $regex: search, $options: "i"}
+           }
+
+           if(type !== "All"){
+            query.eventType=type;
+           }
+
+           const result= await eventCollaction.find(query).sort({event_date: 1}).toArray()
+           res.send(result)
+        })
+
 
           app.post('/event', async(req,res)=>{
                const data = req.body
