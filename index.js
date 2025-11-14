@@ -51,6 +51,13 @@ async function run() {
               res.send(result)
           })
 
+          app.get('/join-events', async(req,res)=>{
+              const email=req.query.email
+              const cursor = joinEventCollaction.find({userEmail: email}).sort({eventDate: 1})
+              const result = await cursor.toArray()
+              res.send(result)
+          })
+
 
           app.post('/event', async(req,res)=>{
                const data = req.body
@@ -61,6 +68,11 @@ async function run() {
 
           app.post('/join-event', async(req,res)=>{
                 const data=req.body
+
+                const existing = await joinEventCollaction.findOne({eventTitle: data.eventTitle,  userEmail:data.userEmail})
+                if(existing){
+                    return res.send({message: "Already joined"})
+                }
                 const result= await joinEventCollaction.insertOne(data)
                 res.send(result)
           })
