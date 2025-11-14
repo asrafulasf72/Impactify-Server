@@ -58,6 +58,29 @@ async function run() {
               res.send(result)
           })
 
+          app.get('/event/:id', async(req,res)=>{
+               const id= req.params.id
+               const query={_id: new ObjectId(id)}
+               const result = await eventCollaction.findOne(query)
+               res.send(result)
+          })
+          app.put('/update-event/:id', async(req,res)=>{
+              const id=req.params.id
+              const data= req.body
+
+                if(data.event_date){
+                    data.event_date = new Date(data.event_date)
+                }
+
+              const query={_id: new ObjectId(id)}
+
+              const UpdateData={
+                $set: data
+              }
+              const result= await eventCollaction.updateOne(query, UpdateData)
+              res.send(result)
+          })
+
 
           app.post('/event', async(req,res)=>{
                const data = req.body
