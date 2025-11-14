@@ -28,6 +28,7 @@ async function run() {
 
           const db=client.db('eventDb')
           const eventCollaction=db.collection('event')
+          const joinEventCollaction=db.collection('joinEventDB')
 
           app.get('/event', async(req,res)=>{
              const today = new Date();
@@ -56,6 +57,12 @@ async function run() {
                data.event_date = new Date(data.event_date);
                const result = await eventCollaction.insertOne(data)
                res.send(result)
+          })
+
+          app.post('/join-event', async(req,res)=>{
+                const data=req.body
+                const result= await joinEventCollaction.insertOne(data)
+                res.send(result)
           })
 
      
