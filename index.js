@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
+require("dotenv").config()
 
 const app=express()
 const port=process.env.PORT || 3000
@@ -9,7 +10,7 @@ const port=process.env.PORT || 3000
 app.use(cors())
 app.use(express.json())
 
-const uri = "mongodb+srv://SocialeventDB:SstreCNaivys9LuO@myfirst-cluster.32i1hy9.mongodb.net/?appName=myfirst-cluster";
+const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@myfirst-cluster.32i1hy9.mongodb.net/?appName=myfirst-cluster`;
 
          app.get('/', (req,res)=>{
              res.send("Impactify Server Is Running")
